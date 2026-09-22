@@ -1,0 +1,119 @@
+```html
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>I Love You ❤️</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: black;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+
+<canvas id="heart"></canvas>
+
+<script>
+    const canvas = document.getElementById("heart");
+    const ctx = canvas.getContext("2d");
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+
+    resize();
+    window.addEventListener("resize", resize);
+
+    const words = [];
+
+    // Kalp noktalarını oluştur
+    for (let scale = 11; scale <= 16; scale++) {
+
+        for (let i = 0; i < 120; i++) {
+
+            const angle = i * (Math.PI * 2) / 120;
+
+            const x =
+                16 * Math.pow(Math.sin(angle), 3) * scale;
+
+            const y =
+                (
+                    13 * Math.cos(angle)
+                    - 5 * Math.cos(2 * angle)
+                    - 2 * Math.cos(3 * angle)
+                    - Math.cos(4 * angle)
+                ) * scale;
+
+            words.push({
+                x: x,
+                y: -y
+            });
+        }
+    }
+
+    let progress = 0;
+
+    function draw() {
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+
+        // Telefona göre kalp boyutu
+        const size = Math.min(canvas.width, canvas.height) / 600;
+
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = "bold 8px Arial";
+        ctx.fillStyle = "#ffb6c1";
+
+        const visible = Math.floor(progress);
+
+        for (let i = 0; i < visible && i < words.length; i++) {
+
+            const point = words[i];
+
+            ctx.fillText(
+                "I love you",
+                centerX + point.x * size,
+                centerY + point.y * size
+            );
+        }
+
+        progress += 0.8;
+
+        if (progress > words.length + 20) {
+            progress = 0;
+        }
+
+        requestAnimationFrame(draw);
+    }
+
+    draw();
+</script>
+
+</body>
+</html>
+```
